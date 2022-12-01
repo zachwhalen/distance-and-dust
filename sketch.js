@@ -1,6 +1,10 @@
 var lines;
 var pages = [[""]];
-var chapterCount = 26; // will actually be one fewer because it starts with 1
+var chapterCount = 26; 
+// nb it will actually be one fewer because it
+// starts with Chaper 1.
+
+var wordCount = 0;
 
 function preload() {
   lines = loadStrings("tibby.txt");
@@ -35,7 +39,7 @@ function setup() {
   content.child(
     createElement(
       "p",
-      "A RED STAMP.<br><br>If lilies are lily white if they exhaust noise and distance and even dust, if they dusty will dirt a surface that has no extreme grace, if they do this and it is not necessary it is not at all necessary if they do this they need a catalogue.<br><br>~ Gertrude Stein, <u>Tender Buttons</u>"
+      "<br><br>If lilies are lily white if they exhaust noise and distance and even dust, if they dusty will dirt a surface that has no extreme grace, if they do this and it is not necessary it is not at all necessary if they do this they need a catalogue.<br><br>~ Gertrude Stein"
     )
   );
   content.child(createElement("h4"));
@@ -43,7 +47,7 @@ function setup() {
   // the main loop
   for (let c = 1; c < chapterCount; c++) {
     // set the noiseInterval for this chapter
-    let noiseInterval = abs(map(c, 1, chapterCount, -0.01, 0.01)) + 0.001;
+    let noiseInterval = abs(map(c, 1, chapterCount, -0.03, 0.03)) + 0.003;
 
     // chapter Title
     content.child(createElement("h2", "Chapter " + c + ":"));
@@ -52,10 +56,10 @@ function setup() {
     let pageCount = random([5, 7, 9, 11, 13, 15]);
     for (let p = 0; p < pageCount; p++) {
       let output = [[""]];
-      let yOff = p;
+      let yOff = p * noiseInterval;
 
       for (let y = 0; y < 40; y++) {
-        let xOff = p;
+        let xOff = p * noiseInterval;
         output[y] = "";
         for (let x = 0; x < 75; x++) {
           let l =
@@ -85,10 +89,11 @@ function setup() {
       }
 
       let formatted = output.join("\n");
-
+      wordCount += formatted.split(" ").length;
       content.child(createElement("pre", formatted));
     }
   }
+  console.log("Word Count: " + wordCount);
   let ti = new Date().toLocaleDateString("en-US", {
     weekday: "long",
     year: "numeric",
@@ -103,7 +108,7 @@ function setup() {
   content.child(
     createElement(
       "p",
-      "This book was created by using <code>noise()</code> to determine which page of an existing book to select letters from. Because of <code>noise()</code> is apparently random but relatively smooth, stepping through the offset at lower intervals increases the likelihood that two contiguous letters will be chosen from the same page. That smoothness increases toward the center of this book as the offset interval decreases toward 0.001.<br><br>The source text for this work is <u>Tibby: A novel dealing with psychic forces and telepathy by Rosetta Luce Gilchrist</u> (1904) by Rosetta Luce Gilchrist. The book's title and epigraph from Gertrude Stein's <u>Tender Buttons</u> (1914).<br><br>This version of <u>distance and even dust</u> was generated on <strong>" + ti + "</strong>.")
+      "This book was created by using <code>noise()</code> to determine which page of an existing book to select letters from. Because of <code>noise()</code> is apparently random but relatively smooth, stepping through the offset at lower intervals increases the likelihood that two contiguous letters will be chosen from the same page. That smoothness increases toward the center of this book as the offset interval decreases toward 0.001.<br><br>The source text for this work is <u>Tibby: A novel dealing with psychic forces and telepathy by Rosetta Luce Gilchrist</u> (1904) by Rosetta Luce Gilchrist. The book's title and epigraph from Gertrude Stein's <u>Tender Buttons</u> (1914).<br><br>This version of <u>distance and even dust</u> was generated on <strong>" + ti + "</strong>. It contains about " + wordCount + " words.")
   );
 
   Bindery.makeBook({
