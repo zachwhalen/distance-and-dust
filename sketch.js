@@ -62,8 +62,7 @@ function setup() {
         let xOff = p * noiseInterval;
         output[y] = "";
         for (let x = 0; x < 75; x++) {
-          let l =
-            pages[floor(map(noise(xOff, yOff), 0, 1, 0, pages.length))][y][x];
+          let l = pages[floor(map(noise(xOff, yOff), 0, 1, 0, pages.length))][y][x];
 
           output[y] += l;
           xOff += noiseInterval;
